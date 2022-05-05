@@ -17,6 +17,10 @@ namespace Commands.Controllers
             _commandService = commandService;
         }
 
+        public async Task<IActionResult> Test()
+        {
+            return View(await _commandService.GetViewPage());
+        }
         public async Task<IActionResult> Index()
         {
             return View(await _commandService.GetViewPage());

@@ -31,7 +31,7 @@
                         <label asp-for="UserInput.SendingCommand.Command_Id">Команда</label>
                         <select asp-for="UserInput.SendingCommand.Command_Id"
                                 asp-items="@(new SelectList(Model.Commands, nameof(Command.Id), nameof(Command.Name)))" class="form-control">
-                            <option selected>Выберите команду</option>
+                            <option  selected>---Выберите команду---</option>
                         </select>
                     </div>
                 </div>
