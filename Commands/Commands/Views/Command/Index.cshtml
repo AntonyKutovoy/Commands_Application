@@ -1,0 +1,91 @@
+﻿@model ViewPage
+@{ var rowNo = 0; }
+
+<div class="row">
+    <nav class="col-md-2">
+        <ul class="list-group">
+            <li class="my-2 list-group-item border-0 border-top-0 border-right-0 border-bottom-0 border-left-0">Клиенты</li>
+            <li class="my-2 list-group-item border-0 border-top-0 border-right-0 border-bottom-0 border-left-0">Пользователи</li>
+            <li class="my-2 list-group-item border-0 border-top-0 border-right-0 border-bottom-0 border-left-0">Терминалы</li>
+            <li class="my-2 list-group-item border-0 border-top-0 border-right-0 border-bottom-0 border-left-0">TID Банка</li>
+            <li class="my-2 list-group-item border-0 border-top-0 border-right-0 border-bottom-0 border-left-0">Транзакции</li>
+            <li class="my-2 list-group-item border-0 border-top-0 border-right-0 border-bottom-0 border-left-0">Логи терминалов</li>
+            <li class="my-2 list-group-item border-0 border-top-0 border-right-0 border-bottom-0 border-left-0">Кассы</li>
+            <li class="my-2 list-group-item border-0 border-top-0 border-right-0 border-bottom-0 border-left-0">Привязать терминалы к клиенту списком</li>
+        </ul>
+    </nav>
+    <div class="col-md-10 px-5 bg-light">
+        <div class="row">
+            <div class="col-md-12 my-4">
+                <p>Отправка команды на терминал</p>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <form asp-action="SendCommand" class="px-4 py-4 mb-4" style="background-color:#ebeced">
+                <div class="row">
+                    <div class="form-group col-md-5">
+                        <label asp-for="UserInput.TerminalId">ID Терминала(ов)</label>
+                        <textarea asp-for="UserInput.TerminalId" type="text" class="form-control" rows="16" style="resize:none"></textarea>
+                    </div>
+                    <div class="form-group col-md-7">
+                        <label asp-for="UserInput.SendingCommand.Command_Id">Команда</label>
+                        <select asp-for="UserInput.SendingCommand.Command_Id"
+                                asp-items="@(new SelectList(Model.Commands, nameof(Command.Id), nameof(Command.Name)))" class="form-control">
+                            <option selected>Выберите команду</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="form-group col-md-4">
+                        <label asp-for="UserInput.SendingCommand.Parameter1">Параметр 1</label>
+                        <input asp-for="UserInput.SendingCommand.Parameter1" type="text" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="UserInput.SendingCommand.Parameter2">Параметр 2</label>
+                        <input asp-for="UserInput.SendingCommand.Parameter2" type="text" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="UserInput.SendingCommand.Parameter3">Параметр 3</label>
+                        <input asp-for="UserInput.SendingCommand.Parameter3" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="form-group col-md">
+                        <button class="btn btn-secondary" style="height:40px;width:130px" disabled>Назад</button>
+                        <button type="submit" class="btn btn-info" style="height:40px;width:130px">Отправить</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="text-center col-1" scope="col"><small>№</small></th>
+                        <th class="text-center col-2" scope="col"><small>Дата и время</small></th>
+                        <th class="text-center col-4" scope="col"><small>Команда</small></th>
+                        <th class="text-center col-1" scope="col"><small>Параметр 1</small></th>
+                        <th class="text-center col-1" scope="col"><small>Параметр 2</small></th>
+                        <th class="text-center col-1" scope="col"><small>Параметр 3</small></th>
+                        <th class="text-center col-2" scope="col"><small>Статус</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = Model.SentCommands.Count - 1; i >= 0; i--)
+                    {
+                        var sentCommand = Model.SentCommands[i];
+                        <tr>
+                            <td class="text-center col-1" scope="row">@(rowNo += 1)</td>
+                            <td class="text-center">@sentCommand.Time_Created</td>
+                            <td class="text-center">@sentCommand.Name</td>
+                            <td class="text-center">@sentCommand.Parameter1</td>
+                            <td class="text-center">@sentCommand.Parameter2</td>
+                            <td class="text-center">@sentCommand.Parameter3</td>
+                            <td class="text-center">@sentCommand.State_Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
