@@ -37,6 +37,14 @@ namespace Commands.Services
             return viewPage;
         }
 
+        public async Task<ViewPage> GetViewPageWithOneTerminal(int terminalId)
+        {
+            var viewPage = new ViewPage();
+            viewPage.Commands = await GetAllCommand();
+            viewPage.SentCommands = await GetSentCommandByOneTerminal(terminalId);
+            return viewPage;
+        }
+
         public async Task SendCommand(ViewPage viewPage)
         {
             var data = new StringContent(JsonConvert.SerializeObject(viewPage.UserInput.SendingCommand, Formatting.Indented).ToLower(),
@@ -49,7 +57,7 @@ namespace Commands.Services
         {
             var commands = JsonConvert.DeserializeObject<Page<Command>>
                 (await GetResponseString(_getAllCommandsUrlPart)).Items;
-            foreach(var command in commands)
+            foreach (var command in commands)
             {
                 command.Parameters_Count = GetParametersCount(command);
             }
@@ -92,14 +100,33 @@ namespace Commands.Services
             return await response.Content.ReadAsStringAsync();
         }
 
-        private int GetParametersCount (Command command)
+        private async Task<List<SentCommand>> GetSentCommandByOneTerminal(int terminalId)
+        {
+            var sentCommandList = new List<SentCommand>();
+            sentCommandList.AddRange(JsonConvert.DeserializeObject<Page<SentCommand>>
+                (await GetResponseString($"terminals/{terminalId}/commands?token=")).Items);
+            var allCommands = await GetAllCommand();
+            foreach (var sentCommand in sentCommandList)
+            {
+                foreach (var command in allCommands)
+                {
+                    if (sentCommand.Command_Id == command.Id)
+                    {
+                        sentCommand.Name = command.Name;
+                    }
+                }
+            }
+            return sentCommandList.OrderBy(q => q.Id).ToList();
+        }
+
+        private int GetParametersCount(Command command)
         {
             var parametersCount = 0;
-            if(command.Parameter_Name1 != null)
+            if (command.Parameter_Name1 != null)
             {
                 parametersCount++;
             }
-            if(command.Parameter_Name2 != null)
+            if (command.Parameter_Name2 != null)
             {
                 parametersCount++;
             }

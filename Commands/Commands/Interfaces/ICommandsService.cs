@@ -10,5 +10,6 @@ namespace Commands.Interfaces
     {
         Task<ViewPage> GetViewPage();
         Task SendCommand(ViewPage viewPage);
+        Task<ViewPage> GetViewPageWithOneTerminal(int terminalId);
     }
 }

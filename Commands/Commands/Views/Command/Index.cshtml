@@ -1,5 +1,4 @@
 ﻿@model ViewPage
-@{ var rowNo = 0; }
 
 <div class="row">
     <nav class="col-md-2">
@@ -96,7 +95,7 @@
                     {
                         var sentCommand = Model.SentCommands[i];
                         <tr>
-                            <td class="text-center col-1" scope="row">@(rowNo += 1)</td>
+                            <td class="text-center col-1" scope="row">@(Model.SentCommands.Count - i)</td>
                             <td class="text-center">@sentCommand.Time_Created</td>
                             <td class="text-center">@sentCommand.Name</td>
                             <td class="text-center">@sentCommand.Parameter1</td>

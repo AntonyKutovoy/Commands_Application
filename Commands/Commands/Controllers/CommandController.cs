@@ -16,21 +16,18 @@ namespace Commands.Controllers
         {
             _commandService = commandService;
         }
-
-        public async Task<IActionResult> Test()
+        public async Task<IActionResult> Index(int terminalId)
         {
-            return View(await _commandService.GetViewPage());
-        }
-        public async Task<IActionResult> Index()
-        {
-            return View(await _commandService.GetViewPage());
+            if (terminalId == 0)
+                return View(await _commandService.GetViewPage());
+            return View(await _commandService.GetViewPageWithOneTerminal(terminalId));
         }
 
         [HttpPost]
         public async Task<IActionResult> SendCommand(ViewPage viewPage)
         {
             await _commandService.SendCommand(viewPage);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { terminalId = viewPage.UserInput.TerminalId });
         }
     }
 }
