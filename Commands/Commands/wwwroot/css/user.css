@@ -1,3 +1,11 @@
-﻿#hidden_div {
+﻿#hidden_div_3 {
+    display: none;
+}
+
+#hidden_div_2 {
+    display: none;
+}
+
+#hidden_div_1 {
     display: none;
 }

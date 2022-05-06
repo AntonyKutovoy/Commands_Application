@@ -52,7 +52,7 @@ namespace Commands
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Command}/{action=Test}/{id?}");
+                    pattern: "{controller=Command}/{action=Index}/{id?}");
             });
         }
     }
